@@ -1,67 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define CHECK_ERR(X) do{if((X)) {printf("expression: %s has error\n", #X); return -1;}}while(0)
-#define CHECK_ALLOC(X) do{if((X) == (void*)-1) {printf("unable to allocate: %s has error\n", #X); return -1;}}while(0)
-int main(int argc, char** argv )
+#define CHKERR(X) do{if((X)){printf("%s: error\n",#X);return -1;}}while(0)
+#define CHKALLOC(X) do{if((X)==(void*)-1){printf("%s: error\n",#X); return -1;}}while(0)
+#define p(X)printf("part"#X"=%d\n",s);
+#define I int
+#define C char
+I main(I c,C**v)
 {
-    FILE* f = fopen("day2.input", "r");
-    char* b = NULL;
-    size_t buf_size;
-
-    if(f == NULL)
-    {
-        printf("Unable to open file\n");
-        return -1;
-    }
-    CHECK_ERR(fseek(f, 0, SEEK_END));
-    buf_size = ftell(f) + 1;
-    CHECK_ALLOC(b = malloc(buf_size));
-    CHECK_ERR(fseek(f, 0, SEEK_SET));
-    fread(b, 1, buf_size, f);
-    int i = 0;
-    int score = 0;
-    int first = 1;
-    char* names[3] = {"rock", "paper", "scissor"};
-    while(i < buf_size)
-    {
-        int op = b[i] - 'A';
-        int me = b[i+2] - 'X';
-        int delta = me + 1;
-        if(((op + 1) % 3) == me)
-        {
-            delta += 6;
-        }
-        else if(op == me)
-        {
-            delta += 3;
-        }
-
-        score += delta;
-        i+=4;
-    }
-    printf("score=%d\n", score);
-    i = 0;
-    score = 0;
-    while(i < buf_size)
-    {
-        int op = b[i] - 'A';
-        int res = b[i+2] - 'X';
-        int d = op + 1 + 3;
-        if(res == 0)
-        {
-            d = (op > 0 ? op - 1 : 2) + 1;
-        }
-        else if(res == 2)
-        {
-            d = ((op + 1) % 3) + 6 + 1;
-        }
-        score += d;
-        i += 4;
-    }
-    printf("score = %d", score);
-
-    free(b);
+    FILE* f=fopen("day2.input","r");C* b=NULL;
+    size_t z;CHKERR(fseek(f,0,SEEK_END));z = ftell(f)+1;I s=0;
+    CHKALLOC(b=malloc(z));fseek(f,0,SEEK_SET),fread(b,1,z,f);
+    for(I i;i<z;i+=4){I o=b[i]-'A';I m=b[i+2]-'X';
+    s+=m+1;if(((o+1)%3)==m)s+=6;else if(o==m)s+=3;}
+    p(1)s = 0; for(I i;i<z;i+=4){I o=b[i]-65;
+    I r=b[i+2]-88;I d=o+1+3;if(r==0)d=(o>0?o-1:2)+1;
+    else if(r==2)d=((o+1)%3)+6+1;s+=d;}p(2)free(b);
     fclose(f);
-    return 0;
 }
