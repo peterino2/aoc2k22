@@ -36,8 +36,6 @@ pub fn main() !void {
         var delta: i32 = try std.math.absInt( currentPixelDraw - (regx));
         var visible: bool = delta < 2;
 
-        // std.debug.print("during: regx = {d} cycleCount = {d} {d} strength={d}\n", .{regx, cycleCount, currentCycleCount, cycleCount * regx});
-        //std.debug.print("currentPixelDraw={d} regx={d} visible={any}\n", .{currentPixelDraw , regx, visible});
         std.debug.print("{s}", .{if (visible) "#" else ".",});
 
         if(@mod(cycleCount, 40) == 0)
